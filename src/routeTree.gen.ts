@@ -12,8 +12,8 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as LogoutRouteImport } from './routes/logout'
 import { Route as AuthRouteRouteImport } from './routes/_auth/route'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as AuthCategoryRouteImport } from './routes/_auth/category'
 import { Route as AuthAboutRouteImport } from './routes/_auth/about'
+import { Route as AuthCategoryIndexRouteImport } from './routes/_auth/category/index'
 
 const LogoutRoute = LogoutRouteImport.update({
   id: '/logout',
@@ -29,14 +29,14 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuthCategoryRoute = AuthCategoryRouteImport.update({
-  id: '/category',
-  path: '/category',
-  getParentRoute: () => AuthRouteRoute,
-} as any)
 const AuthAboutRoute = AuthAboutRouteImport.update({
   id: '/about',
   path: '/about',
+  getParentRoute: () => AuthRouteRoute,
+} as any)
+const AuthCategoryIndexRoute = AuthCategoryIndexRouteImport.update({
+  id: '/category/',
+  path: '/category/',
   getParentRoute: () => AuthRouteRoute,
 } as any)
 
@@ -44,13 +44,13 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/logout': typeof LogoutRoute
   '/about': typeof AuthAboutRoute
-  '/category': typeof AuthCategoryRoute
+  '/category/': typeof AuthCategoryIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/logout': typeof LogoutRoute
   '/about': typeof AuthAboutRoute
-  '/category': typeof AuthCategoryRoute
+  '/category': typeof AuthCategoryIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -58,11 +58,11 @@ export interface FileRoutesById {
   '/_auth': typeof AuthRouteRouteWithChildren
   '/logout': typeof LogoutRoute
   '/_auth/about': typeof AuthAboutRoute
-  '/_auth/category': typeof AuthCategoryRoute
+  '/_auth/category/': typeof AuthCategoryIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/logout' | '/about' | '/category'
+  fullPaths: '/' | '/logout' | '/about' | '/category/'
   fileRoutesByTo: FileRoutesByTo
   to: '/' | '/logout' | '/about' | '/category'
   id:
@@ -71,7 +71,7 @@ export interface FileRouteTypes {
     | '/_auth'
     | '/logout'
     | '/_auth/about'
-    | '/_auth/category'
+    | '/_auth/category/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -103,13 +103,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_auth/category': {
-      id: '/_auth/category'
-      path: '/category'
-      fullPath: '/category'
-      preLoaderRoute: typeof AuthCategoryRouteImport
-      parentRoute: typeof AuthRouteRoute
-    }
     '/_auth/about': {
       id: '/_auth/about'
       path: '/about'
@@ -117,17 +110,24 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthAboutRouteImport
       parentRoute: typeof AuthRouteRoute
     }
+    '/_auth/category/': {
+      id: '/_auth/category/'
+      path: '/category'
+      fullPath: '/category/'
+      preLoaderRoute: typeof AuthCategoryIndexRouteImport
+      parentRoute: typeof AuthRouteRoute
+    }
   }
 }
 
 interface AuthRouteRouteChildren {
   AuthAboutRoute: typeof AuthAboutRoute
-  AuthCategoryRoute: typeof AuthCategoryRoute
+  AuthCategoryIndexRoute: typeof AuthCategoryIndexRoute
 }
 
 const AuthRouteRouteChildren: AuthRouteRouteChildren = {
   AuthAboutRoute: AuthAboutRoute,
-  AuthCategoryRoute: AuthCategoryRoute,
+  AuthCategoryIndexRoute: AuthCategoryIndexRoute,
 }
 
 const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
