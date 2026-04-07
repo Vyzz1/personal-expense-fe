@@ -183,7 +183,6 @@ export default function ImportCSVForm({ open, onClose }: ImportCSVFormProps) {
         }
       });
       
-      message.success(`${validRowsCount} transactions imported successfully!`);
       handleClose();
     } catch (error: any) {
       if (axios.isCancel(error)) {
