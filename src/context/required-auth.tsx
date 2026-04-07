@@ -1,4 +1,4 @@
-import { Spin } from "antd";
+import { Button, Result, Spin } from "antd";
 import { useEffect, useState } from "react";
 import { hasAuthParams, useAuth } from "react-oidc-context";
 
@@ -21,10 +21,12 @@ const RequireAuth = ({ children }: { children: React.ReactNode }) => {
 
   if (auth.error) {
     return (
-      <div>
-        <h2>Lỗi trao đổi Token!</h2>
-        <p>{auth.error.message}</p>
-      </div>
+      <Result
+        status="500"
+        title="500"
+        subTitle="Sorry, something went wrong."
+        extra={<Button type="primary">Back Home</Button>}
+      />
     );
   }
   if (auth.isLoading) {
