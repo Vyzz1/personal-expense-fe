@@ -32,9 +32,9 @@ export const AppLayout = ({ children }: { children: React.ReactNode }) => {
 
   const menuItems = [
     {
-      key: "/",
+      key: "/dashboard",
       icon: <DashboardOutlined size={18} />,
-      label: <Link to="/">Dashboard</Link>,
+      label: <Link to="/dashboard">Dashboard</Link>,
     },
      {
       key: "/transaction",
