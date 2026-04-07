@@ -37,7 +37,7 @@ export function CategoryModal({
     if (isOpen) {
       if (category) {
         form.setFieldValue("name", category.name);
-        form.setFieldValue("parentId", category.parent?.id || null);
+        form.setFieldValue("parentId", category.parentId || null);
       } else {
         form.resetFields();
       }
@@ -66,7 +66,7 @@ export function CategoryModal({
             );
             return;
         }
-        
+        message.error("An error occurred while saving the category.");
       },
     },
   );

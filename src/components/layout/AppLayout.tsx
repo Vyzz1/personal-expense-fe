@@ -1,14 +1,13 @@
 import { Layout, Menu, Button, theme, Dropdown, Avatar, Drawer, Grid } from "antd";
 import { Link, useRouterState } from "@tanstack/react-router";
 import {
-  LayoutDashboard,
   LogOut,
   Menu as MenuIcon,
-  Receipt,
   User,
   ChevronDown,
 } from "lucide-react";
 import React, { useState, useEffect } from "react";
+import { AppstoreOutlined, DashboardOutlined, TransactionOutlined } from "@ant-design/icons";
 
 const { Header, Sider, Content } = Layout;
 const { useBreakpoint } = Grid;
@@ -34,12 +33,17 @@ export const AppLayout = ({ children }: { children: React.ReactNode }) => {
   const menuItems = [
     {
       key: "/",
-      icon: <LayoutDashboard size={18} />,
+      icon: <DashboardOutlined size={18} />,
       label: <Link to="/">Dashboard</Link>,
+    },
+     {
+      key: "/transaction",
+      icon: <TransactionOutlined size={18} />,
+      label: <Link to="/transaction">Transactions</Link>,
     },
     {
       key: "/category",
-      icon: <Receipt size={18} />,
+      icon: <AppstoreOutlined size={18} />,
       label: <Link to="/category">Categories</Link>,
     },
     {

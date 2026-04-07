@@ -14,9 +14,22 @@ interface ApiResponse<T> {
   fieldErrors: FieldError[]
 }
 
+interface PaginatedResponse<T> {
+  content: T[]
+  page: number
+  size: number
+  totalElements: number
+  totalPages: number
+  last: boolean
+}
+
  interface FieldError {
   field: string
   rejectedValue: string
   message: string
   code: string
 }
+
+
+interface ApiPaginationResponse<T> extends ApiResponse<PaginatedResponse<T>> {}
+
