@@ -18,7 +18,7 @@ export default function TopTransactions({
 
   const { data, isLoading, error } =
     useApiQuery<TransactionApiPaginationResponse>(
-      ["dashboard-top-transactions", categoryId, month, year],
+      ["dashboard", "top-transactions", categoryId, month, year],
       "/transactions",
       {
         enabled: !!categoryId,

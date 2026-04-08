@@ -10,6 +10,7 @@ import {
   InAppNotificationEventTypes,
   type InAppNotification,
 } from "#/models/notification";
+import { useNotificationSound } from "./useNotificationSound";
 
 export const useNewNotifications = () => {
   const baseURL = getEnv("VITE_API_URL", {
@@ -19,6 +20,7 @@ export const useNewNotifications = () => {
 
   const eventSourceRef = useRef<EventSourcePolyfill | null>(null);
   const queryClient = useQueryClient();
+  const { play } = useNotificationSound();
 
 
   useEffect(() => {
@@ -58,6 +60,16 @@ export const useNewNotifications = () => {
           queryClient.invalidateQueries({ queryKey: ["transactions"] });
         }
       },
+    );
+
+    es.addEventListener(
+      InAppNotificationEventTypes.EXPENSE_CALCULATED,
+      (event: any) => {
+        if (event.data) {
+          play();
+          queryClient.invalidateQueries({ queryKey: ["dashboard"] });
+        }
+      }
     );
 
     es.onerror = () => {
