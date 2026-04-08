@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useApiQuery } from "#/hooks/useApiQuery";
 import { type CategoryAnalyticsApiResponse } from "#/models/category";
 import { formatCurrency } from "#/utils/formatter";
@@ -217,6 +217,8 @@ export default function CategoryChart({
 } = {}) {
   const { month, year } = useDashboardMonthYearStore();
 
+  const [isUserSelected, setIsUserSelected] = useState(false);
+
   const { data, isLoading, error } = useApiQuery<CategoryAnalyticsApiResponse>(
     ["dashboard", "category-trends", month, year],
     "/categories/analysis",
@@ -253,6 +255,16 @@ export default function CategoryChart({
       onCategorySelect(biggestCategory.id, biggestCategory.name);
     }
   }, [biggestCategory, selectedCategoryId, onCategorySelect]);
+
+  useEffect(() => {
+    if (biggestCategory && onCategorySelect && !isUserSelected) {
+      onCategorySelect(biggestCategory.id, biggestCategory.name);
+    }
+  }, [biggestCategory, onCategorySelect, isUserSelected]);
+
+  useEffect(() => {
+    setIsUserSelected(false);
+  }, [month, year]);
 
   return (
     <Card
@@ -300,6 +312,7 @@ export default function CategoryChart({
                 strokeWidth={0}
                 minAngle={3}
                 onClick={(data) => {
+                  setIsUserSelected(true);
                   if (onCategorySelect && data?.payload) {
                     onCategorySelect(data.payload.id, data.payload.name);
                   }
@@ -357,7 +370,7 @@ export default function CategoryChart({
             </PieChart>
           </ResponsiveContainer>
 
-          <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+          <div className="grid grid-cols-2 gap-4">
             {chartData.map((item) => (
               <LegendItem
                 key={item.id}
@@ -366,7 +379,12 @@ export default function CategoryChart({
                 percentage={item.percentage}
                 amount={item.totalAmount}
                 isActive={!selectedCategoryId || selectedCategoryId === item.id}
-                onClick={() => onCategorySelect?.(item.id, item.name)}
+                onClick={() => {
+                  setIsUserSelected(true);
+                  if (onCategorySelect) {
+                    onCategorySelect(item.id, item.name);
+                  }
+                }}
               />
             ))}
           </div>

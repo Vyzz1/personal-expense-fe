@@ -22,13 +22,8 @@ export const useNewNotifications = () => {
   const queryClient = useQueryClient();
   const { play } = useNotificationSound();
 
-
   useEffect(() => {
     if (!user?.access_token) return;
-
-    if (eventSourceRef.current) {
-      eventSourceRef.current.close();
-    }
 
     const es = new EventSourcePolyfill(`${baseURL}/notifications/subscribe`, {
       headers: {
@@ -69,11 +64,24 @@ export const useNewNotifications = () => {
           play();
           queryClient.invalidateQueries({ queryKey: ["dashboard"] });
         }
-      }
+      },
     );
 
     es.onerror = () => {
+      console.log("SSE error, reconnecting...");
       es.close();
+
+      setTimeout(() => {
+        eventSourceRef.current = new EventSourcePolyfill(
+          `${baseURL}/notifications/subscribe`,
+          {
+            headers: {
+              Authorization: `Bearer ${user.access_token}`,
+            },
+            heartbeatTimeout: 120000,
+          },
+        );
+      }, 3000);
     };
 
     return () => {

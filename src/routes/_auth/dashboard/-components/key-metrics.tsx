@@ -148,7 +148,7 @@ export default function KeyMetrics() {
           color="#f59e0b"
           subtitle={
             metrics
-              ? `${metrics.changePercentage >= 0 ? "+" : ""}${metrics.changePercentage}% change`
+              ? `${metrics.changePercentage >= 0 ? "+" : ""}${Math.abs(metrics.changePercentage).toFixed(3)}% change`
               : undefined
           }
         />

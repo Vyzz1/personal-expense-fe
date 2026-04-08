@@ -7,7 +7,7 @@ interface UseNotificationSoundOptions {
 }
 
 export function useNotificationSound(
-  options: UseNotificationSoundOptions = {}
+  options: UseNotificationSoundOptions = {},
 ) {
   const {
     soundUrl = "/notification.wav",
