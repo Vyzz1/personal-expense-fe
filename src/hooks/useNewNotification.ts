@@ -14,7 +14,7 @@ export const useNewNotifications = () => {
   const baseURL = getEnv("VITE_API_URL", {
     parse: String,
   });
-  const { user } = useAuth();
+  const { user, signinSilent } = useAuth();
   const eventSourceRef = useRef<EventSourcePolyfill | null>(null);
   const queryClient = useQueryClient();
   const { play } = useNotificationSound();
@@ -69,11 +69,20 @@ export const useNewNotifications = () => {
         },
       );
 
-      es.onerror = () => {
+      es.onerror = async (err: any) => {
         es.close();
-        setTimeout(() => {
-          connect();
-        }, 5000);
+
+        if (err.status === 401) {
+          try {
+            await signinSilent();
+          } catch (e) {
+            console.error("Silent refresh failed", e);
+          }
+        } else {
+          setTimeout(() => {
+            connect();
+          }, 5000);
+        }
       };
 
       eventSourceRef.current = es;
@@ -86,5 +95,5 @@ export const useNewNotifications = () => {
         eventSourceRef.current.close();
       }
     };
-  }, [user?.access_token, baseURL, queryClient, play]);
+  }, [user?.access_token, baseURL, queryClient, play, signinSilent]);
 };
