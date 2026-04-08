@@ -1,13 +1,10 @@
 import { Layout, Menu, Button, theme, Dropdown, Avatar, Drawer, Grid } from "antd";
 import { Link, useRouterState } from "@tanstack/react-router";
-import {
-  LogOut,
-  Menu as MenuIcon,
-  User,
-  ChevronDown,
-} from "lucide-react";
+import { LogOut, Menu as MenuIcon, User, ChevronDown } from "lucide-react";
 import React, { useState, useEffect } from "react";
 import { AppstoreOutlined, DashboardOutlined, TransactionOutlined } from "@ant-design/icons";
+import { useAuth } from "react-oidc-context";
+import { getInitials } from "#/utils/helper";
 
 const { Header, Sider, Content } = Layout;
 const { useBreakpoint } = Grid;
@@ -30,13 +27,16 @@ export const AppLayout = ({ children }: { children: React.ReactNode }) => {
     token: { borderRadiusLG },
   } = theme.useToken();
 
+  const { user, signoutRedirect } = useAuth();
+  const keycloakProfileUrl = `${user?.profile.iss}/account`;
+
   const menuItems = [
     {
       key: "/dashboard",
       icon: <DashboardOutlined size={18} />,
       label: <Link to="/dashboard">Dashboard</Link>,
     },
-     {
+    {
       key: "/transaction",
       icon: <TransactionOutlined size={18} />,
       label: <Link to="/transaction">Transactions</Link>,
@@ -57,12 +57,18 @@ export const AppLayout = ({ children }: { children: React.ReactNode }) => {
     {
       key: "profile",
       icon: <User size={16} />,
-      label: <Link to="/about">Profile</Link>,
+      label: "Profile",
+      onClick: () => {
+        window.open(keycloakProfileUrl, "_blank");
+      },
     },
     {
       key: "logout",
       icon: <LogOut size={16} />,
-      label: <Link to="/logout">Logout</Link>,
+      label: "Logout",
+      onClick: () => {
+        signoutRedirect();
+      },
       danger: true,
     },
   ];
@@ -74,7 +80,9 @@ export const AppLayout = ({ children }: { children: React.ReactNode }) => {
           <div className="w-8 h-8 rounded-lg bg-blue-500 text-white flex items-center justify-center text-sm font-bold">
             PE
           </div>
-          {(!collapsed || isMobile) && <span className="whitespace-nowrap truncate">Personal Expense</span>}
+          {(!collapsed || isMobile) && (
+            <span className="whitespace-nowrap truncate">Personal Expense</span>
+          )}
         </div>
       </div>
       <Menu
@@ -110,9 +118,7 @@ export const AppLayout = ({ children }: { children: React.ReactNode }) => {
         styles={{ body: { padding: 0 } }}
         width={260}
       >
-        <div className="h-full flex flex-col bg-white">
-          {sidebarContent}
-        </div>
+        <div className="h-full flex flex-col bg-white">{sidebarContent}</div>
       </Drawer>
 
       <Layout>
@@ -121,22 +127,22 @@ export const AppLayout = ({ children }: { children: React.ReactNode }) => {
           <Button
             type="text"
             icon={<MenuIcon size={20} className="text-gray-600" />}
-            onClick={() => isMobile ? setMobileMenuOpen(true) : setCollapsed(!collapsed)}
+            onClick={() => (isMobile ? setMobileMenuOpen(true) : setCollapsed(!collapsed))}
             className="hover:bg-gray-100 w-10 h-10 flex items-center justify-center rounded-full"
           />
 
           {/* USER */}
-          <Dropdown
-            menu={{ items: userMenuItems }}
-            trigger={["click"]}
-            placement="bottomRight"
-          >
+          <Dropdown menu={{ items: userMenuItems }} trigger={["click"]} placement="bottomRight">
             <div className="flex items-center gap-2 cursor-pointer px-3 py-1.5 rounded-lg hover:bg-gray-100 transition">
-              <Avatar className="bg-gradient-to-r from-blue-500 to-indigo-500">
-                U
+              <Avatar
+                src={user?.profile.picture}
+                alt={user?.profile.name}
+                className="bg-gradient-to-r from-blue-500 to-indigo-500"
+              >
+                {getInitials(user?.profile.name || "User")}
               </Avatar>
               <span className="text-sm font-medium text-gray-700 hidden sm:block">
-                User
+                {user?.profile.name || "User"}
               </span>
               <ChevronDown size={14} className="text-gray-400" />
             </div>
