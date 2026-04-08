@@ -10,7 +10,7 @@
     "build": "vite build",
     "preview": "vite preview",
     "test": "vitest run",
-    "format": "prettier --write .",
+    "format": "git diff HEAD --name-only | xargs prettier --write",
     "lint": "eslint . --ext .ts,.tsx"
   },
   "dependencies": {
