@@ -83,7 +83,7 @@ function TrendChart() {
   const { month, year } = useDashboardMonthYearStore();
 
   const { data, isLoading, error } = useApiQuery<ThreeMonthExpenseApiResponse>(
-    ["expenses", "three-month-trend", month, year],
+    ["dashboard", "three-month-trend", month, year],
     "/expenses/compare",
     {
       axiosConfig: {

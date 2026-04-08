@@ -18,7 +18,7 @@ export default function TopTransactions({
 
   const { data, isLoading, error } =
     useApiQuery<TransactionApiPaginationResponse>(
-      ["dashboard-top-transactions", categoryId, month, year],
+      ["dashboard", "top-transactions", categoryId, month, year],
       "/transactions",
       {
         enabled: !!categoryId,
@@ -48,7 +48,7 @@ export default function TopTransactions({
               Top Transactions
             </h3>
             <p className="text-sm text-blue-500 mt-0.5 mb-0">
-              {categoryName ? `For ${categoryName}` : "Select a category"}
+              {Boolean(data?.data.content.length) && `For ${categoryName}`}
             </p>
           </div>
 
