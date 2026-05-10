@@ -11,6 +11,7 @@ import {
   Button,
   Flex,
   Input,
+  Select,
   Table,
   Typography,
   DatePicker,
@@ -25,6 +26,7 @@ import { z } from "zod";
 import CategorySelect from "./-components/category-select";
 import AddTransactionBtn from "./-components/add-transction-btn";
 import ManualTransactionForm from "./-components/manual-transaction-form";
+import { TRANSACTION_RANGE_AMOUNT } from "#/constants";
 
 const transactionPageParams = z.object({
   page: z.coerce.number().min(0).default(0).catch(0),
@@ -36,6 +38,8 @@ const transactionPageParams = z.object({
   toDate: z.string().optional(),
   categoryIds: z.array(z.string()).optional(),
   type: z.array(z.enum(["INCOME", "EXPENSE"])).optional(),
+  minAmount: z.coerce.number().min(0).optional(),
+  maxAmount: z.coerce.number().min(0).optional(),
 });
 
 export const Route = createFileRoute("/_auth/transaction/")({
@@ -56,6 +60,8 @@ function RouteComponent() {
     toDate,
     categoryIds,
     type,
+    minAmount,
+    maxAmount,
   } = searchParams;
 
   const navigate = Route.useNavigate();
@@ -103,6 +109,8 @@ function RouteComponent() {
             toDate,
             categoryIds,
             type,
+            minAmount,
+            maxAmount,
           },
         },
       },
@@ -309,7 +317,7 @@ function RouteComponent() {
 
           <div className="hidden md:block w-px h-6 bg-gray-200" />
 
-          <div className="w-full md:flex-1 min-w-50">
+          <div className=" w-full md:w-fit">
             <CategorySelect
               defaultValue={categoryIds}
               onChange={(value) =>
@@ -323,6 +331,38 @@ function RouteComponent() {
               }
             />
           </div>
+          <div className="hidden md:block w-px h-6 bg-gray-200" />
+
+           <div className="flex items-center justify-center gap-2">
+            <Select
+              allowClear
+              className="w-full md:w-auto"
+              placeholder="Amount Range"
+              value={
+                TRANSACTION_RANGE_AMOUNT.find(
+                  (range) => range.min === minAmount && range.max === maxAmount
+                )?.value || "any"
+              }
+              options={TRANSACTION_RANGE_AMOUNT}
+              onChange={(val) => {
+                const selected = TRANSACTION_RANGE_AMOUNT.find(
+                  (r) => r.value === val
+                );
+                navigate({
+                  search: (prev: any) => ({
+                    ...prev,
+                    minAmount: selected?.min !== undefined ? selected.min : undefined,
+                    maxAmount: selected?.max !== undefined ? selected.max : undefined,
+                    page: 0,
+                  }),
+                });
+              }}
+            />
+          </div>
+
+          <div className="hidden flex-1 md:block  " />
+
+
 
           <Button
             type="link"
