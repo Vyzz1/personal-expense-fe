@@ -2,7 +2,12 @@ import { Layout, Menu, Button, theme, Dropdown, Avatar, Drawer, Grid } from "ant
 import { Link, useRouterState } from "@tanstack/react-router";
 import { LogOut, Menu as MenuIcon, User, ChevronDown } from "lucide-react";
 import React, { useState, useEffect } from "react";
-import { AppstoreOutlined, DashboardOutlined, TransactionOutlined } from "@ant-design/icons";
+import {
+  AppstoreOutlined,
+  DashboardOutlined,
+  MoneyCollectFilled,
+  TransactionOutlined,
+} from "@ant-design/icons";
 import { useAuth } from "react-oidc-context";
 import { getInitials } from "#/utils/helper";
 
@@ -47,9 +52,9 @@ export const AppLayout = ({ children }: { children: React.ReactNode }) => {
       label: <Link to="/category">Categories</Link>,
     },
     {
-      key: "/about",
-      icon: <User size={18} />,
-      label: <Link to="/about">About</Link>,
+      key: "/budget",
+      icon: <MoneyCollectFilled size={18} />,
+      label: <Link to="/budget">Budgets</Link>,
     },
   ];
 
