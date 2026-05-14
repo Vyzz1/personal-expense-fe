@@ -13,7 +13,10 @@ import { Route as LogoutRouteImport } from './routes/logout'
 import { Route as AuthRouteRouteImport } from './routes/_auth/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthAboutRouteImport } from './routes/_auth/about'
+import { Route as AuthTransactionIndexRouteImport } from './routes/_auth/transaction/index'
+import { Route as AuthDashboardIndexRouteImport } from './routes/_auth/dashboard/index'
 import { Route as AuthCategoryIndexRouteImport } from './routes/_auth/category/index'
+import { Route as AuthBudgetIndexRouteImport } from './routes/_auth/budget/index'
 
 const LogoutRoute = LogoutRouteImport.update({
   id: '/logout',
@@ -34,9 +37,24 @@ const AuthAboutRoute = AuthAboutRouteImport.update({
   path: '/about',
   getParentRoute: () => AuthRouteRoute,
 } as any)
+const AuthTransactionIndexRoute = AuthTransactionIndexRouteImport.update({
+  id: '/transaction/',
+  path: '/transaction/',
+  getParentRoute: () => AuthRouteRoute,
+} as any)
+const AuthDashboardIndexRoute = AuthDashboardIndexRouteImport.update({
+  id: '/dashboard/',
+  path: '/dashboard/',
+  getParentRoute: () => AuthRouteRoute,
+} as any)
 const AuthCategoryIndexRoute = AuthCategoryIndexRouteImport.update({
   id: '/category/',
   path: '/category/',
+  getParentRoute: () => AuthRouteRoute,
+} as any)
+const AuthBudgetIndexRoute = AuthBudgetIndexRouteImport.update({
+  id: '/budget/',
+  path: '/budget/',
   getParentRoute: () => AuthRouteRoute,
 } as any)
 
@@ -44,13 +62,19 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/logout': typeof LogoutRoute
   '/about': typeof AuthAboutRoute
+  '/budget/': typeof AuthBudgetIndexRoute
   '/category/': typeof AuthCategoryIndexRoute
+  '/dashboard/': typeof AuthDashboardIndexRoute
+  '/transaction/': typeof AuthTransactionIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/logout': typeof LogoutRoute
   '/about': typeof AuthAboutRoute
+  '/budget': typeof AuthBudgetIndexRoute
   '/category': typeof AuthCategoryIndexRoute
+  '/dashboard': typeof AuthDashboardIndexRoute
+  '/transaction': typeof AuthTransactionIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -58,20 +82,40 @@ export interface FileRoutesById {
   '/_auth': typeof AuthRouteRouteWithChildren
   '/logout': typeof LogoutRoute
   '/_auth/about': typeof AuthAboutRoute
+  '/_auth/budget/': typeof AuthBudgetIndexRoute
   '/_auth/category/': typeof AuthCategoryIndexRoute
+  '/_auth/dashboard/': typeof AuthDashboardIndexRoute
+  '/_auth/transaction/': typeof AuthTransactionIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/logout' | '/about' | '/category/'
+  fullPaths:
+    | '/'
+    | '/logout'
+    | '/about'
+    | '/budget/'
+    | '/category/'
+    | '/dashboard/'
+    | '/transaction/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/logout' | '/about' | '/category'
+  to:
+    | '/'
+    | '/logout'
+    | '/about'
+    | '/budget'
+    | '/category'
+    | '/dashboard'
+    | '/transaction'
   id:
     | '__root__'
     | '/'
     | '/_auth'
     | '/logout'
     | '/_auth/about'
+    | '/_auth/budget/'
     | '/_auth/category/'
+    | '/_auth/dashboard/'
+    | '/_auth/transaction/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -110,6 +154,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthAboutRouteImport
       parentRoute: typeof AuthRouteRoute
     }
+    '/_auth/transaction/': {
+      id: '/_auth/transaction/'
+      path: '/transaction'
+      fullPath: '/transaction/'
+      preLoaderRoute: typeof AuthTransactionIndexRouteImport
+      parentRoute: typeof AuthRouteRoute
+    }
+    '/_auth/dashboard/': {
+      id: '/_auth/dashboard/'
+      path: '/dashboard'
+      fullPath: '/dashboard/'
+      preLoaderRoute: typeof AuthDashboardIndexRouteImport
+      parentRoute: typeof AuthRouteRoute
+    }
     '/_auth/category/': {
       id: '/_auth/category/'
       path: '/category'
@@ -117,17 +175,30 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthCategoryIndexRouteImport
       parentRoute: typeof AuthRouteRoute
     }
+    '/_auth/budget/': {
+      id: '/_auth/budget/'
+      path: '/budget'
+      fullPath: '/budget/'
+      preLoaderRoute: typeof AuthBudgetIndexRouteImport
+      parentRoute: typeof AuthRouteRoute
+    }
   }
 }
 
 interface AuthRouteRouteChildren {
   AuthAboutRoute: typeof AuthAboutRoute
+  AuthBudgetIndexRoute: typeof AuthBudgetIndexRoute
   AuthCategoryIndexRoute: typeof AuthCategoryIndexRoute
+  AuthDashboardIndexRoute: typeof AuthDashboardIndexRoute
+  AuthTransactionIndexRoute: typeof AuthTransactionIndexRoute
 }
 
 const AuthRouteRouteChildren: AuthRouteRouteChildren = {
   AuthAboutRoute: AuthAboutRoute,
+  AuthBudgetIndexRoute: AuthBudgetIndexRoute,
   AuthCategoryIndexRoute: AuthCategoryIndexRoute,
+  AuthDashboardIndexRoute: AuthDashboardIndexRoute,
+  AuthTransactionIndexRoute: AuthTransactionIndexRoute,
 }
 
 const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(

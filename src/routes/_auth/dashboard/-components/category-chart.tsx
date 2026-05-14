@@ -80,12 +80,8 @@ function CustomTooltip({ active, payload }: CustomTooltipProps) {
         </span>
       </div>
       <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
-        <div
-          style={{ display: "flex", justifyContent: "space-between", gap: 24 }}
-        >
-          <span style={{ fontSize: 12, color: "var(--color-text-secondary)" }}>
-            Amount
-          </span>
+        <div style={{ display: "flex", justifyContent: "space-between", gap: 24 }}>
+          <span style={{ fontSize: 12, color: "var(--color-text-secondary)" }}>Amount</span>
           <span
             style={{
               fontSize: 12,
@@ -96,12 +92,8 @@ function CustomTooltip({ active, payload }: CustomTooltipProps) {
             {formatCurrency(entry.totalAmount)}
           </span>
         </div>
-        <div
-          style={{ display: "flex", justifyContent: "space-between", gap: 24 }}
-        >
-          <span style={{ fontSize: 12, color: "var(--color-text-secondary)" }}>
-            Transactions
-          </span>
+        <div style={{ display: "flex", justifyContent: "space-between", gap: 24 }}>
+          <span style={{ fontSize: 12, color: "var(--color-text-secondary)" }}>Transactions</span>
           <span
             style={{
               fontSize: 12,
@@ -121,9 +113,7 @@ function CustomTooltip({ active, payload }: CustomTooltipProps) {
             justifyContent: "space-between",
           }}
         >
-          <span style={{ fontSize: 11, color: "var(--color-text-secondary)" }}>
-            Share
-          </span>
+          <span style={{ fontSize: 11, color: "var(--color-text-secondary)" }}>Share</span>
           <span style={{ fontSize: 11, fontWeight: 600, color: item.color }}>
             {entry.percentage.toFixed(1)}%
           </span>
@@ -161,9 +151,7 @@ function LegendItem({
         transition: "opacity 0.2s",
       }}
     >
-      <div
-        style={{ display: "flex", alignItems: "center", gap: 8, minWidth: 0 }}
-      >
+      <div style={{ display: "flex", alignItems: "center", gap: 8, minWidth: 0 }}>
         <div
           style={{
             width: 8,
@@ -185,9 +173,7 @@ function LegendItem({
           {name}
         </span>
       </div>
-      <div
-        style={{ display: "flex", alignItems: "center", gap: 8, flexShrink: 0 }}
-      >
+      <div style={{ display: "flex", alignItems: "center", gap: 8, flexShrink: 0 }}>
         <span style={{ fontSize: 12, color: "var(--color-text-secondary)" }}>
           {formatCurrency(amount)}
         </span>
@@ -229,10 +215,8 @@ export default function CategoryChart({
           year,
         },
       },
-    },
+    }
   );
-
-  if (error) return null;
 
   const total = (data?.data ?? []).reduce((sum, c) => sum + c.totalAmount, 0);
 
@@ -245,7 +229,7 @@ export default function CategoryChart({
     }));
 
   const monthName = new Intl.DateTimeFormat("en-US", { month: "long" }).format(
-    new Date(year, month - 1),
+    new Date(year, month - 1)
   );
 
   const biggestCategory = chartData[0];
@@ -265,6 +249,8 @@ export default function CategoryChart({
   useEffect(() => {
     setIsUserSelected(false);
   }, [month, year]);
+
+  if (error) return null;
 
   return (
     <Card
@@ -325,10 +311,7 @@ export default function CategoryChart({
                     fill={entry.color}
                     style={{
                       outline: "none",
-                      opacity:
-                        !selectedCategoryId || selectedCategoryId === entry.id
-                          ? 1
-                          : 0.4,
+                      opacity: !selectedCategoryId || selectedCategoryId === entry.id ? 1 : 0.4,
                       transition: "opacity 0.2s",
                     }}
                   />
@@ -342,17 +325,8 @@ export default function CategoryChart({
               />
 
               {/* center label */}
-              <text
-                x="50%"
-                y="50%"
-                textAnchor="middle"
-                dominantBaseline="middle"
-              >
-                <tspan
-                  x="50%"
-                  dy="-8"
-                  style={{ fontSize: 13, fill: "#9ca3af" }}
-                >
+              <text x="50%" y="50%" textAnchor="middle" dominantBaseline="middle">
+                <tspan x="50%" dy="-8" style={{ fontSize: 13, fill: "#9ca3af" }}>
                   Total
                 </tspan>
                 <tspan
