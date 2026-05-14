@@ -7,10 +7,7 @@ interface CategorySelectProps {
   onChange?: (value: string[]) => void;
 }
 
-export default function CategorySelect({
-  defaultValue,
-  onChange,
-}: CategorySelectProps) {
+export default function CategorySelect({ defaultValue, onChange }: CategorySelectProps) {
   const { data: categoriesData, isLoading: isLoadingCategories } = useApiQuery<
     ApiResponse<Category[]>
   >(["categories"], "/categories", {});
@@ -30,6 +27,7 @@ export default function CategorySelect({
       style={{
         width: 250,
       }}
+      maxTagCount="responsive"
       placeholder="Select categories"
       loading={isLoadingCategories}
       options={options}

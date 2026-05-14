@@ -4,10 +4,7 @@ import { notification, message } from "antd";
 import { getEnv } from "#/utils/envUtils";
 import { useAuth } from "react-oidc-context";
 import { useQueryClient } from "@tanstack/react-query";
-import {
-  InAppNotificationEventTypes,
-  type InAppNotification,
-} from "#/models/notification";
+import { InAppNotificationEventTypes, type InAppNotification } from "#/models/notification";
 import { useNotificationSound } from "./useNotificationSound";
 
 export const useNewNotifications = () => {
@@ -45,29 +42,29 @@ export const useNewNotifications = () => {
         }
       };
 
-      es.addEventListener(
-        InAppNotificationEventTypes.TRANSACTION_BATCH_PROCESSED,
-        (event: any) => {
-          if (event.data) {
-            const data = JSON.parse(event.data) as InAppNotification;
-            notification.success({
-              message: data.message,
-              description: data.description,
-            });
-            queryClient.invalidateQueries({ queryKey: ["transactions"] });
-          }
-        },
-      );
+      es.addEventListener(InAppNotificationEventTypes.TRANSACTION_BATCH_PROCESSED, (event: any) => {
+        if (event.data) {
+          const data = JSON.parse(event.data) as InAppNotification;
+          notification.success({
+            message: data.message,
+            description: data.description,
+          });
+          queryClient.invalidateQueries({ queryKey: ["transactions"] });
+        }
+      });
 
-      es.addEventListener(
-        InAppNotificationEventTypes.EXPENSE_CALCULATED,
-        (event: any) => {
-          if (event.data) {
-            play();
-            queryClient.invalidateQueries({ queryKey: ["dashboard"] });
-          }
-        },
-      );
+      es.addEventListener(InAppNotificationEventTypes.EXPENSE_CALCULATED, (event: any) => {
+        if (event.data) {
+          play();
+          queryClient.invalidateQueries({ queryKey: ["dashboard"] });
+        }
+      });
+
+      es.addEventListener(InAppNotificationEventTypes.BUDGET_UPDATED, (event: any) => {
+        if (event.data) {
+          queryClient.invalidateQueries({ queryKey: ["budgets"] });
+        }
+      });
 
       es.onerror = () => {
         es.close();
