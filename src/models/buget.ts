@@ -6,6 +6,7 @@ export interface Budget {
   id: string;
   name: string;
   limitAmount: number;
+  thresholdPercentage?: number;
   spentAmount: number;
   period: string; // e.g., "2024-06" for June 2024
   status: BudgetStatus;
@@ -20,4 +21,5 @@ export interface BudgetFormData {
   name: string;
   categoryId?: string;
   limitAmount: number;
+  thresholdPercentage?: number;
 }

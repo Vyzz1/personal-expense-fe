@@ -20,6 +20,8 @@ interface Props {
 export const BudgetCard: React.FC<Props> = ({ budget, onEdit, onDelete }) => {
   const remaining = budget.limitAmount - budget.spentAmount;
   const isExceeded = remaining < 0;
+  const thresholdLabel =
+    budget.thresholdPercentage !== undefined ? `${budget.thresholdPercentage}%` : "Not set";
 
   return (
     <Card
@@ -63,6 +65,9 @@ export const BudgetCard: React.FC<Props> = ({ budget, onEdit, onDelete }) => {
                 {budget.category.name}
               </Tag>
             )}
+            <Tag color="gold" bordered={false} style={{ borderRadius: "4px", margin: 0 }}>
+              Threshold: {thresholdLabel}
+            </Tag>
             <Text type="secondary" style={{ fontSize: "12px" }}>
               {budget.period}
             </Text>

@@ -1,16 +1,22 @@
 import React, { useEffect, useState } from "react";
-import { Space, Input, Select, Row, Col } from "antd";
+import { Space, Input, Select, Row, Col, Segmented } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 import { useNavigate, useSearch } from "@tanstack/react-router";
 import { useApiQuery } from "#/hooks/useApiQuery";
 import type { Category } from "#/models/category";
 import type { BudgetStatus } from "#/models/buget";
-import { budgetSortOptions, budgetStatusOptions } from "../-constants";
+import {
+  budgetSortDirectionOptions,
+  budgetSortFieldOptions,
+  budgetStatusOptions,
+} from "../-constants";
 
 const { Option } = Select;
 
 export const BudgetFilters: React.FC = () => {
   const search = useSearch({ from: "/_auth/budget/" });
+  const currentSortBy = search.sortBy ?? "createdAt";
+  const currentSortOrder = (search.sortOrder ?? "desc") as "asc" | "desc";
 
   const {
     data: categories,
@@ -112,26 +118,41 @@ export const BudgetFilters: React.FC = () => {
             </Select>
 
             <Select
-              value={`${search.sortBy}_${search.sortOrder}`}
-              style={{ minWidth: 180 }}
-              onChange={(value: string) => {
-                const [sortBy, sortOrder] = value.split("_");
+              placeholder="Sort by"
+              style={{ minWidth: 160 }}
+              value={currentSortBy}
+              onChange={(sortBy: string) => {
                 navigate({
                   to: "/budget",
                   search: {
                     ...search,
                     sortBy,
-                    sortOrder: sortOrder as "asc" | "desc",
+                    sortOrder: currentSortOrder,
                   },
                 });
               }}
             >
-              {budgetSortOptions.map((option) => (
-                <Option key={option.label} value={`${option.sortBy}_${option.sortOrder}`}>
+              {budgetSortFieldOptions.map((option) => (
+                <Option key={option.value} value={option.value}>
                   {option.label}
                 </Option>
               ))}
             </Select>
+
+            <Segmented
+              options={budgetSortDirectionOptions}
+              value={currentSortOrder}
+              onChange={(sortOrder) => {
+                navigate({
+                  to: "/budget",
+                  search: {
+                    ...search,
+                    sortBy: currentSortBy,
+                    sortOrder: sortOrder as "asc" | "desc",
+                  },
+                });
+              }}
+            />
           </Space>
         </Col>
       </Row>

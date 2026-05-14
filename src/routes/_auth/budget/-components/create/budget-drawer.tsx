@@ -52,7 +52,15 @@ export const BudgetDrawer: React.FC<BudgetDrawerProps> = ({
   });
 
   const onSubmit = async (values: BudgetFormData) => {
-    await mutateAsync(values);
+    const payload = isEditMode
+      ? {
+          name: values.name,
+          limitAmount: values.limitAmount,
+          thresholdPercentage: values.thresholdPercentage,
+        }
+      : values;
+
+    await mutateAsync(payload);
   };
 
   const handleClose = () => {
@@ -103,7 +111,15 @@ export const BudgetDrawer: React.FC<BudgetDrawerProps> = ({
         </div>
       }
     >
-      <BudgetForm form={form} onFinish={onSubmit} />
+      <BudgetForm
+        form={form}
+        onFinish={onSubmit}
+        initialValues={{
+          limitAmount: initialData?.limitAmount,
+          thresholdPercentage: initialData?.thresholdPercentage,
+        }}
+        spentAmount={initialData?.spentAmount}
+      />
     </Drawer>
   );
 };

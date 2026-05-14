@@ -3,6 +3,7 @@ import {
   Button,
   Col,
   Empty,
+  Flex,
   Pagination,
   Result,
   Row,
@@ -21,6 +22,7 @@ import { useApiQuery } from "#/hooks/useApiQuery";
 import { type Budget, type BudgetsApiResponse } from "#/models/buget";
 import { useState } from "react";
 import { BudgetDrawer } from "./-components/create/budget-drawer";
+import RefreshButton from "#/components/shared/refresh-button";
 
 const pageQuery = commonPageQuery.extend({
   categoryIds: z.array(z.string()).optional(),
@@ -104,18 +106,22 @@ function RouteComponent() {
               Monitor and control your personal expense tracking seamlessly.
             </Text>
           </div>
-          <Button
-            type="primary"
-            size="large"
-            icon={<PlusOutlined />}
-            style={{ borderRadius: "8px" }}
-            onClick={() => {
-              setSelectedBudget(null);
-              setFormOpen(true);
-            }}
-          >
-            Create Budget
-          </Button>
+
+          <Flex wrap gap="16px" align="center">
+            <RefreshButton onRefresh={() => refetch()} />
+            <Button
+              type="primary"
+              size="medium"
+              icon={<PlusOutlined />}
+              style={{ borderRadius: "8px" }}
+              onClick={() => {
+                setSelectedBudget(null);
+                setFormOpen(true);
+              }}
+            >
+              Create Budget
+            </Button>
+          </Flex>
         </div>
 
         {/* Summary Statistics */}
