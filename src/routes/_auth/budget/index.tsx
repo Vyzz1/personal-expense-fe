@@ -161,7 +161,7 @@ function RouteComponent() {
         <Pagination
           showSizeChanger
           onShowSizeChange={onShowSizeChange}
-          defaultCurrent={budgets?.data?.page! + 1 || 1}
+          defaultCurrent={(budgets?.data?.page ?? 0) + 1 || 1}
           total={budgets?.data.totalElements || 0}
         />
       </div>

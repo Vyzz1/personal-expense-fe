@@ -26,10 +26,6 @@ export const BudgetFilters: React.FC = () => {
     enabled: true,
   });
 
-  if (categoriesError) {
-    return null;
-  }
-
   const [localSearch, setLocalSearch] = useState(search.search || "");
 
   const navigate = useNavigate({});
@@ -51,6 +47,10 @@ export const BudgetFilters: React.FC = () => {
       clearTimeout(handler);
     };
   }, [localSearch, navigate, search]);
+
+  if (categoriesError) {
+    return null;
+  }
 
   return (
     <div style={{ marginBottom: "24px", width: "100%" }}>

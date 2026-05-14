@@ -11,12 +11,7 @@ interface CategoryModalProps {
   onSuccess: () => void;
 }
 
-export function CategoryModal({
-  isOpen,
-  onClose,
-  category,
-  onSuccess,
-}: CategoryModalProps) {
+export function CategoryModal({ isOpen, onClose, category, onSuccess }: CategoryModalProps) {
   const [form] = Form.useForm();
 
   const { data: categoriesData, isLoading: isLoadingCategories } = useApiQuery<
@@ -49,41 +44,34 @@ export function CategoryModal({
     category ? "PUT" : "POST",
     {
       onSuccess: () => {
-        message.success(
-          `Category ${category ? "updated" : "created"} successfully`,
-        );
+        message.success(`Category ${category ? "updated" : "created"} successfully`);
+        onSuccess();
+        onClose();
       },
       onError: (error: ApiErrorResponse) => {
-        if(error.fieldErrors && error.fieldErrors.length > 0) {
-            error.fieldErrors.forEach((fieldError) => {
-                form.setFields([
-                    {
-                        name: fieldError.field,
-                        errors: [fieldError.message],
-                    },
-                ]);
-            }
-            );
-            return;
+        if (error.fieldErrors && error.fieldErrors.length > 0) {
+          error.fieldErrors.forEach((fieldError) => {
+            form.setFields([
+              {
+                name: fieldError.field,
+                errors: [fieldError.message],
+              },
+            ]);
+          });
+          return;
         }
         message.error("An error occurred while saving the category.");
       },
-    },
+    }
   );
 
   const handleSubmit = async (values: { name: string; parentId?: string }) => {
-    try {
-      if (category) {
-        await mutateAsync({ ...values });
-      } else {
-        await mutateAsync(values);
-      }
-      form.resetFields();
-      onSuccess();
-      onClose();
-    } catch (error) {
-      // Error is handled in onError
+    if (category) {
+      await mutateAsync({ ...values });
+    } else {
+      await mutateAsync(values);
     }
+    form.resetFields();
   };
 
   const handleCancel = () => {

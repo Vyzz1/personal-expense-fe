@@ -9,12 +9,7 @@ interface ConfirmDeleteProps {
   url: string;
 }
 
-export default function ConfirmDelete({
-  itemName,
-  button,
-  onDeleted,
-  url,
-}: ConfirmDeleteProps) {
+export default function ConfirmDelete({ itemName, button, onDeleted, url }: ConfirmDeleteProps) {
   const renderButton = () => {
     if (button) {
       return button;
@@ -27,9 +22,7 @@ export default function ConfirmDelete({
       onDeleted();
     },
     onError: (error: ApiErrorResponse) => {
-      message.error(
-        error.message || `Failed to delete ${itemName}. Please try again.`,
-      );
+      message.error(error.message || `Failed to delete ${itemName}. Please try again.`);
     },
   });
 
@@ -39,6 +32,7 @@ export default function ConfirmDelete({
       onDeleted();
     } catch (error) {
       // Error is handled in onError
+      console.error("Delete failed:", error);
     }
   };
 
